@@ -22,8 +22,6 @@ import { Input } from '@/components/ui/input';
 import toast from 'react-hot-toast';
 import { useParams, useRouter } from 'next/navigation';
 import { AlertModal } from '@/components/modals/AlertModal';
-import { ApiAlert } from '@/components/ApiAlert';
-import { useOrigin } from '@/hooks/useOrigin';
 import { ImageUpload } from '@/components/ImageUpload';
 
 interface BillboardFormProps {
@@ -42,7 +40,6 @@ export const BillboardForm = ({ initialData }: BillboardFormProps) => {
   const [loading, setLoading] = useState(false);
   const params = useParams();
   const router = useRouter();
-  const origin = useOrigin();
 
   const title = initialData ? 'Edit billboard' : 'Create billboard';
   const description = initialData ? 'Edit a billboard' : 'Add a new billboard';
@@ -87,7 +84,7 @@ export const BillboardForm = ({ initialData }: BillboardFormProps) => {
         `/api/${params.storeId}/billboards/${params.billboardId}`
       );
       router.refresh();
-      router.push('/');
+      router.push(`/${params.storeId}/billboards`);
       toast.success('Billboard deleted.');
     } catch (error) {
       toast.error(
@@ -172,12 +169,6 @@ export const BillboardForm = ({ initialData }: BillboardFormProps) => {
           </Button>
         </form>
       </Form>
-      <Separator />
-      <ApiAlert
-        title='NEXT_PUBLIC_API_URL'
-        description={`${origin}/api/${params.storeId}`}
-        variant='public'
-      />
     </>
   );
 };
