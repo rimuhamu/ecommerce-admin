@@ -19,18 +19,20 @@ model Store{
   
   billboards Billboard[]
   categories Category[]
-  size Size[]
-  color Color[]
+  sizes Size[]
+  colors Color[]
+  products Product[]
 
 }
 
 model Billboard{
   id String @id @default(cuid())
-  storeId String 
   label String
   imageUrl String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  storeId String 
 
   categories Category[]
 
@@ -39,11 +41,14 @@ model Billboard{
 
 model Category{
   id String @id @default(cuid())
-  storeId String
-  billboardId String
   name String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  storeId String
+  billboardId String
+
+  products Product[]
 
   store Store @relation(fields: [storeId], references: [id])
   billboard Billboard @relation(fields: [billboardId], references: [id])
@@ -51,22 +56,61 @@ model Category{
 
 model Size{
   id String @id @default(cuid())
-  storeId String
   name String
   value String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
     
+  storeId String
+
+  products Product[]
+
   store Store @relation(fields: [storeId], references: [id])
 }
 
 model Color{
   id String @id @default(cuid())
-  storeId String
   name String
   value String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
     
+  storeId String
+
+  products Product[]
+
   store Store @relation(fields: [storeId], references: [id])
+}
+
+model Product{
+  id String @id @default(cuid())
+  name String
+  price Decimal
+  isFeatured Boolean @default(false)
+  isArchived Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+    
+  storeId String
+  categoryId String
+  sizeId String
+  colorId String
+
+  images Image[]
+
+  store Store @relation(fields: [storeId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+  size Size @relation(fields: [sizeId], references: [id])
+  color Color @relation(fields: [colorId], references: [id])
+}
+
+model Image{
+  id String @id @default(cuid())
+  url String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  productId String
+  
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
