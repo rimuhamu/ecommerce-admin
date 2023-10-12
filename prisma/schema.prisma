@@ -22,6 +22,7 @@ model Store{
   sizes Size[]
   colors Color[]
   products Product[]
+  orders Order[]
 
 }
 
@@ -97,6 +98,7 @@ model Product{
   colorId String
 
   images Image[]
+  orderItems OrderItem[]
 
   store Store @relation(fields: [storeId], references: [id])
   category Category @relation(fields: [categoryId], references: [id])
@@ -113,4 +115,29 @@ model Image{
   productId String
   
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Order{
+  id String @id @default(cuid())
+  isPaid Boolean @default(false)  
+  phone String @default("")  
+  address String @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt 
+
+  storeId String
+
+  orderItems OrderItem[]
+
+  store Store @relation(fields: [storeId], references: [id])
+}
+
+model OrderItem{
+  id String @id @default(cuid())
+
+  orderId String
+  productId String
+
+  order Order @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
 }
