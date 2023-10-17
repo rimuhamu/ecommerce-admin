@@ -25,13 +25,13 @@ export const ImageUpload = ({
     setIsMounted(true);
   }, []);
 
-  const onUpload = (result: any) => {
-    onChange(result.info.secure_url);
-  };
-
   if (!isMounted) {
     return null;
   }
+
+  const onUpload = (result: any) => {
+    onChange(result.info.secure_url);
+  };
 
   return (
     <div>
